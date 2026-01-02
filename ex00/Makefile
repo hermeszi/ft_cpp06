@@ -6,11 +6,11 @@
 #    By: myuen <myuen@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/17 14:53:29 by myuen             #+#    #+#              #
-#    Updated: 2025/12/26 17:05:39 by myuen            ###   ########.fr        #
+#    Updated: 2026/01/02 20:56:13 by myuen            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 00
+NAME = convert
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -Iinc -g -MMD -MP -pedantic
 
@@ -18,7 +18,8 @@ SRC_DIR = src
 OBJ_DIR = obj
 
 SRCS = $(SRC_DIR)/main.cpp \
-		$(SRC_DIR)/ScalarConverter.cpp \
+	$(SRC_DIR)/ScalarConverter.cpp \
+	${SRC_DIR}/helper.cpp	\
 
 
 

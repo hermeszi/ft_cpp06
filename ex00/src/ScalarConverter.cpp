@@ -6,19 +6,22 @@
 /*   By: myuen <myuen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:53:29 by myuen             #+#    #+#             */
-/*   Updated: 2025/12/31 22:00:37 by myuen            ###   ########.fr       */
+/*   Updated: 2026/01/02 22:05:06 by myuen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ScalarConverter.hpp"
 #include <iostream>
 #include <cstdlib>
+#include <limits>
+#include <iomanip>
+#include <cerrno>
+#include "ScalarConverter.hpp"
+#include "helper.hpp"
+
 
 using std::string;
 using std::endl;
 using std::cout;
-
-ScalarConverter::ScalarConverter() {};
 
 ScalarConverter::ScalarConverter(const ScalarConverter & other)
 {
@@ -75,7 +78,7 @@ static bool isValidNum(const std::string & str)
     return hasDigit;
 }
 
-Type_ ScalarConverter::detechType(const std::string & input)
+ScalarConverter::Type_ ScalarConverter::detechType(const std::string & input)
 {
     if (input.empty())
         return INVALID;
@@ -121,39 +124,121 @@ Type_ ScalarConverter::detechType(const std::string & input)
     }
     return INVALID;   
 }
-static void printInt(int value)
-{
-    
-}
+
 
 void ScalarConverter::convert(const std::string & input)
 {
-    Type_ type = detechType(input);
+    //std::cout << "Input received: [" << input << "] length: " << input.length() << std::endl;
+    
+    ScalarConverter::Type_ type = detechType(input);
     
     if (type == INVALID)
     {
         cout << "Invalid Input" << endl;
         return ;
     }
-    if (type == INT)
+    else if (type == SPECIAL_FLOAT)
     {
-        cout << "-- TYPE deteched: INT --" << endl;
-        int value = std::stoi(input); // no range test yet
+        //cout << "-- TYPE deteched: Special Float --" << endl;
+        try
+        {
+            cout << "char: impossible" << endl;
+            cout << "int: impossible" << endl;
+            cout << "float: " << input << endl;
+            std::string temp(input);
+            //temp.pop_back();
+            temp.erase(temp.length()-1);
+            cout << "double:" << temp << endl;          
+        }
+        catch(const std::out_of_range & e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "float value must be between " << -std::numeric_limits<float>::max() << " to " << std::numeric_limits<float>::max() << "." << endl;
+        }
+    }
+    else if (type == SPECIAL_DOUBLE)
+    {
+        //cout << "-- TYPE detected: Special Double --" << endl;
+        try
+        {
+            cout << "char: impossible" << endl;
+            cout << "int: impossible" << endl;
+            cout << "float: " << input << "f" <<endl;
+            cout << "double:" << input << endl;          
+        }
+        catch(const std::exception & e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "double value must be between " << -(std::numeric_limits<double>::max()) << " to " << std::numeric_limits<double>::max() << "." << endl;
+        }
+    }
+    else if (type == INT)
+    {
+        //cout << "-- TYPE deteched: INT --" << endl;
+        try
+        {
+            int value = convertInt(input); // Convert to INT first
+            printChar(static_cast<double> (value));
+            printInt(static_cast<double> (value));
+            printFloat(static_cast<double> (value));
+            printDouble(static_cast<double> (value));
+        }
+        catch(const std::exception & e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "int value must be between " << std::numeric_limits<int>::min() << " to " << std::numeric_limits<int>::max() << "." << endl;
+        }
     }
     else if (type == FLOAT)
     {
-        cout << "-- TYPE deteched: FLOAT --" << endl;
-        float value = std::stof(input); // no range test yet
+        //cout << "-- TYPE deteched: FLOAT --" << endl;
+        try
+        {
+            float value = convertFloat(input); // Convert to FLOAT first
+            printChar(static_cast<double> (value));
+            printInt(static_cast<double> (value));
+            printFloat(static_cast<double> (value));
+            printDouble(static_cast<double> (value));            
+        }
+        catch(const std::exception & e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "float value must be between " << -std::numeric_limits<float>::max() << " to " << std::numeric_limits<float>::max() << "." << endl;
+        }
     }
     else if (type == DOUBLE)
     {
-        cout << "-- TYPE deteched: DOUBLE --" << endl;
-        float value = std::stod(input); // no range test yet
+        //cout << "-- TYPE deteched: DOUBLE --" << endl;
+        try
+        {
+            double value = convertDouble(input); //Convert to DOUBLE first
+            printChar(value);
+            printInt(value);
+            printFloat(value);
+            printDouble(value);            
+        }
+        catch(const std::exception & e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "double value must be between " << -std::numeric_limits<double>::max() << " to " << std::numeric_limits<double>::max()<< "." << endl;
+        }
     }
     else if (type == CHAR)
     {
-        cout << "-- TYPE deteched: CHAR --" << endl;
-        char value = input.at(1);
+        //cout << "-- TYPE deteched: CHAR --" << endl;
+        try
+        {
+            char value = input.at(1); // get CHAR
+            printChar(static_cast<double> (value));
+            printInt(static_cast<double> (value));
+            printFloat(static_cast<double> (value));
+            printDouble(static_cast<double> (value));            
+        }
+        catch(const std::exception & e)
+        {
+            std::cerr << e.what() << '\n';
+            std::cout << "char value must be between 33 to 126." << endl;
+        }
     }
     
 }
