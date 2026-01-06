@@ -6,7 +6,7 @@
 /*   By: myuen <myuen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:53:29 by myuen             #+#    #+#             */
-/*   Updated: 2026/01/02 22:05:06 by myuen            ###   ########.fr       */
+/*   Updated: 2026/01/06 20:48:35 by myuen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,48 +35,44 @@ ScalarConverter & ScalarConverter::operator=(const ScalarConverter & other)
     return *this;
 }
 
-static bool hasOneDecimal(const std::string & str)
+static size_t countDecimal(const std::string & str)
 {
+    size_t count = 0;
     if (str.empty())
-        return false;
-    bool hasDecimal = false;
+        return 0;
     for (size_t i = 0; i < str.length(); ++i)
     {
         if (str.at(i) == '.')
         {
-            if (hasDecimal == false)
-                hasDecimal = true;
-            else
-                return false;
+            ++count;
         }
     }
-    return hasDecimal;
+    return count;
 }
 
-static bool isValidNum(const std::string & str)
+static bool validNumber(const std::string & str)
 {
     if (str.empty())
+    {
         return false;
-        
-    bool hasDecimal = false;
-    bool hasDigit = false;
+    }
 
+    bool hasDigit = false;
+    bool hasCorrectDecimal = (countDecimal(str) < 2);
+        
     for (size_t i = 0; i < str.length(); ++i)
     {
         if (str.at(i) == '.')
-        {
-            if (hasDecimal == false)
-                hasDecimal = true;
-            else
-                return false;
-        }
-        else if (str.at(i) < 58 && str.at(i) > 47)
+            ;
+        else if (str.at(i) >= '0' && str.at(i) <= '9' )
             hasDigit = true;
         else
             return false;      
     }
-    return hasDigit;
+    
+    return (hasDigit && hasCorrectDecimal);
 }
+
 
 ScalarConverter::Type_ ScalarConverter::detechType(const std::string & input)
 {
@@ -111,15 +107,16 @@ ScalarConverter::Type_ ScalarConverter::detechType(const std::string & input)
     }
     if (temp.empty())
         return INVALID;
-        
-    hasDecimal = hasOneDecimal(temp);
-    if (isValidNum(temp))
+    
+    //check if num is valid 
+    hasDecimal = (countDecimal(temp) > 0);  
+    if (validNumber(temp))
     {
-        if (hasF && hasDecimal)
+        if (hasF)
             return FLOAT;
         else if (hasDecimal)
             return DOUBLE;
-        else if (!hasF)
+        else
             return INT;
     }
     return INVALID;   
