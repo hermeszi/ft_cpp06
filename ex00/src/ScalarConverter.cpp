@@ -6,7 +6,7 @@
 /*   By: myuen <myuen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:53:29 by myuen             #+#    #+#             */
-/*   Updated: 2026/01/06 20:48:35 by myuen            ###   ########.fr       */
+/*   Updated: 2026/01/09 18:19:17 by myuen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "ScalarConverter.hpp"
 #include "helper.hpp"
 
-
-using std::string;
 using std::endl;
 using std::cout;
 
@@ -166,7 +164,7 @@ void ScalarConverter::convert(const std::string & input)
         catch(const std::exception & e)
         {
             std::cerr << e.what() << '\n';
-            std::cout << "double value must be between " << -(std::numeric_limits<double>::max()) << " to " << std::numeric_limits<double>::max() << "." << endl;
+            std::cout << "double value must be between " << -std::numeric_limits<double>::max() << " to " << std::numeric_limits<double>::max() << "." << endl;
         }
     }
     else if (type == INT)
