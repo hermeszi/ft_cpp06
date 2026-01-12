@@ -45,10 +45,10 @@ int main()
     std::cout << "=== Hex representation ===" << std::endl;
     std::cout << std::hex << std::showbase;
     std::cout << "Original address:        " << &original << std::endl;
+    std::cout << "As uintptr_t:            " << num_ptr << std::endl;
+    std::cout << "Restored address:        " << restored_ptr << std::endl;
     //std::cout << "As unsigned long:        " << num_long << std::endl;
     //std::cout << "As size_t:               " << num_sizet << std::endl;
-    std::cout << "As uintptr_t:            " << num_ptr << std::endl;
-    std::cout << "Restored address:        " << &restored_ptr << std::endl;
 
 
 
